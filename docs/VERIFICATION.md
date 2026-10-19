@@ -1,3 +1,5 @@
+> Historical record from before the Java Web migration. For the current runtime, structure, build, tests and deployment, see [Java Web migration](JAVA_WEB_MIGRATION.md).
+
 # Verification — 19 October 2026
 
 Executed locally on macOS ARM64 / Python 3.12 / Node 24.19.0:

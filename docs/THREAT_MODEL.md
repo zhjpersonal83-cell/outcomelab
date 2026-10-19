@@ -1,3 +1,5 @@
+> Historical record from before the Java Web migration. For the current runtime, structure, build, tests and deployment, see [Java Web migration](JAVA_WEB_MIGRATION.md).
+
 # Threat model
 
 Assets: service availability, independent sandbox weights, synthetic feedback confidentiality. Assume malicious unauthenticated visitors. Random 256-bit session capabilities resist guessing; no global mutable learner is exposed. Do not share exported text or session URLs. Capability tokens are in request paths, so disable access logs at every proxy. Application logs contain method/status/duration only; no text, address, token or full path. Edge infrastructure may log client addresses; review its settings before release.

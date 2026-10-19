@@ -1,0 +1,285 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OutcomeLab Java Web API",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        }
+      }
+    },
+    "/api/ready": {
+      "get": {
+        "summary": "Model readiness",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        }
+      }
+    },
+    "/api/sessions": {
+      "post": {
+        "summary": "Create private sandbox",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        }
+      }
+    },
+    "/api/sessions/current": {
+      "delete": {
+        "summary": "Delete sandbox",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/sessions/current/predict": {
+      "post": {
+        "summary": "Predict support queue",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "account",
+                      "billing",
+                      "delivery"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sessions/current/feedback": {
+      "post": {
+        "summary": "Apply one real gradient update",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "text",
+                  "label"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "account",
+                      "billing",
+                      "delivery"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sessions/current/evaluate": {
+      "post": {
+        "summary": "Evaluate clean or shifted frozen data",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shift": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sessions/current/rollback": {
+      "post": {
+        "summary": "Restore previous model snapshot",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/sessions/current/export": {
+      "get": {
+        "summary": "Export JSON or CSV",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "429": {
+            "description": "Rate limit"
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-OutcomeLab-Session",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

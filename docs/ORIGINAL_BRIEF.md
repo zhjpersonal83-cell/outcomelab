@@ -1,3 +1,5 @@
+> Historical record from before the Java Web migration. For the current runtime, structure, build, tests and deployment, see [Java Web migration](JAVA_WEB_MIGRATION.md).
+
 # Work implementation brief — OutcomeLab
 
 You are operating in ChatGPT Work with permission to develop a NEW, independent, production-grade open-source software product, deploy it to the user's server after verifying access, and synchronize it to the user's GitHub after verifying the target account/repository. The user will configure DNS; do not claim DNS is configured or deployment succeeded without testing. Work autonomously where authorized; ask only for essential server credentials, domain name, or GitHub authorization if unavailable. Never request passwords in chat; use secure sign-in flows.

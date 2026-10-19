@@ -1,40 +1,51 @@
-# OutcomeLab — Break It. Teach It. Measure It.
+# OutcomeLab — Java Web
 
-An English-first, non-commercial AI reliability playground. Route a synthetic support ticket, correct a linear classifier, then inspect measured changes on frozen clean and shifted data. No fabricated learning or promised gains.
+Break it. Teach it. Measure it.
 
-Live demo: [outcomelab.zhongjiehuang.com](https://outcomelab.zhongjiehuang.com). Deployed behind Nginx with a dedicated, resource-limited systemd service; see [live deployment record](docs/LIVE_DEPLOYMENT.md).
+[Live application](https://outcomelab.zhongjiehuang.com) · [Source](https://github.com/zhjpersonal83-cell/outcomelab) · [Migration and verification](docs/JAVA_WEB_MIGRATION.md)
 
-Source: [zhjpersonal83-cell/outcomelab](https://github.com/zhjpersonal83-cell/outcomelab).
+## Stack and structure
 
-## Run locally
-Requires Python 3.12, Node 22, pnpm 11.25.0. `make setup`, then in two terminals:
+Aligned with IAFM: **Java 21, Maven WAR, Servlet 4 (`javax.servlet`), Tomcat 9, HTML/CSS/native JavaScript**, with JDBC/MySQL for Marginloom persistence. There is no Node, React, TypeScript, FastAPI, Cloudflare or SQLite application runtime. Optional offline Python research tools are kept separately, as in IAFM.
+
+```text
+pom.xml
+src/main/JavaWeb/Java/
+  Controller/       # HTTP/API and validation boundary
+  Model/            # Classifier/reliability and application logic
+  DatabaseService/  # JDBC lifecycle, schema and migration (Marginloom)
+src/main/JavaWeb/WebAPP/
+  index.html
+  assets/css/app.css
+  assets/js/app.js
+  WEB-INF/web.xml
+src/main/resources/ # Trained model and frozen evaluation data
+src/main/Python/    # Optional offline research/reproduction only
+src/test/java/     # Numeric parity, isolation and real Tomcat tests
+src/test/resources/
+docs/
+deploy/
+```
+
+## Existing capabilities
+
+OutcomeLab preserves the original 4096-feature hashing transform, exported trained coefficients, normalized one-vs-rest probabilities and real logistic SGD corrections. The Java implementation has fixture parity against the original Python implementation at baseline and after successive updates, including Unicode inputs. Frozen train/validation/test templates, distractor evaluation, 20-update cap, isolated 30-minute sandboxes, exact rollback and JSON/CSV exports remain available. It has no database because the existing product deliberately uses ephemeral experiments.
+
+
+## Build and test
+
+Install Java 21 and Maven 3.9+, then run:
 
 ```sh
-cd backend && ../.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --no-access-log
+mvn verify
 ```
-```sh
-cd frontend && pnpm dev
-```
-Open http://localhost:5173. `make test lint build` validates the source. Browser test: `cd frontend && pnpm exec playwright install chromium && pnpm test:e2e` (activate the Python venv first). Docker alternative: copy `.env.example` to `.env`, then `docker compose up --build -d`; open http://localhost:8080.
 
-## Architecture
-```mermaid
-flowchart LR
-  Browser[React + TypeScript] --> Proxy[Nginx / same origin]
-  Proxy --> API[FastAPI / bounded single process]
-  API --> Sessions[Ephemeral isolated model versions]
-  Sessions --> Learner[HashingVectorizer + SGDClassifier]
-  API --> Evaluation[Frozen clean and shifted examples]
-```
-The model has 4096 hashed features and three labels: account, billing, delivery. Seed 41 fixes training. The server deep-copies the baseline per sandbox; a global lock serializes mutations and evaluation. Twenty updates, 128 sessions and 30-minute inactivity expiry bound memory. Version snapshots enable exact rollback. Sessions are bearer capabilities held only in browser memory. Reload starts fresh. PostgreSQL is deliberately omitted: no accounts, durable feedback or shared training need storage. No migrations are needed.
+Deploy `target/OutcomeLab.war` to Tomcat 9. Maven runs independent numeric fixtures and real HTTP requests against embedded Tomcat. H2 in MySQL mode is used only by tests; live Marginloom uses MySQL. Native browser scripts require no frontend build step.
 
-## One-minute demo
-0–15s: run the mixed invoice/parcel example. Inspect three probabilities. 15–30s: assign the intended queue and apply a correction; this performs one real gradient update. 30–45s: compare baseline/current scores and inject distractor words. 45–60s: inspect the confusion matrix and calibration bins, roll back, then export the experiment. Scores can improve, remain unchanged or get worse.
+Optional baseline regeneration: install src/main/Python/requirements.txt in a virtual environment and run python src/main/Python/reproduce_baseline.py. This overwrites the reference model; run all parity tests before accepting it.
 
-See [methodology](docs/METHODOLOGY.md), [threat model](docs/THREAT_MODEL.md), [deployment](docs/DEPLOYMENT.md), and [verification](docs/VERIFICATION.md). OpenAPI is generated at `/openapi.json` on the backend (proxied in Docker); interactive documentation is at backend `/docs` during local development.
+## Boundaries
 
-## Ownership and scope
-New, independent implementation for OutcomeLab, created with AI assistance from the supplied product brief. No IAFM or Marginloom source was used. No credentials, accounts, third-party analytics or commercial features. No claims about degrees, awards, employment or visa eligibility. This personal portfolio demo is not a statement of legal eligibility.
+Synthetic, non-commercial research and engineering demonstration, developed with AI assistance. Existing limitations remain: synthetic metrics do not establish real-world safety, interactive threshold exploration is not independent validation, and human reviews do not rewrite benchmark labels. No fabricated learning or benchmark improvement.
 
-## Recruiter deep dive
-Inspect `backend/app.py` for reproducible partitions, real incremental updates, capacity controls and exact rollback; `backend/tests/test_app.py` for isolation/concurrency and leakage checks; frontend for accessible interactive state; and CI/Compose for delivery design. Tradeoff: one locked process provides clear session consistency but limited throughput. Horizontal scaling requires sticky routing or a redesigned session store. This is a polished MVP, not a certified production service.
+Historical deployment records describe the superseded implementations. Current operation is documented in [Java Web migration](docs/JAVA_WEB_MIGRATION.md). First-party licensing and retained third-party notices remain in force.

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Break a classifier, teach corrections, measure real learning."
+    />
+    <title>OutcomeLab — Break It. Teach It. Measure It.</title>
+    <link rel="stylesheet" href="assets/css/app.css" />
+    <script defer src="assets/js/app.js"></script>
+  </head>
+  <body>
+    <div id="app" data-theme="dark">
+      <header>
+        <a class="brand" href="#">◈ <span>OutcomeLab</span></a>
+        <nav>
+          <a href="#lab">Laboratory</a><a href="#method">Method</a
+          ><button id="theme" aria-label="Toggle colour theme">☀</button>
+        </nav>
+      </header>
+      <main>
+        <section class="hero">
+          <div class="eyebrow"><i></i> INTERACTIVE AI RELIABILITY LAB</div>
+          <h1>Break it.<br />Teach it.<br /><em>Measure it.</em></h1>
+          <div class="hero-aside">
+            <p>A model can be confident.<br />It can also be wrong.</p>
+            <p class="muted">
+              Find the edge of a support-ticket classifier. Give it a
+              correction. See what learning actually changes.
+            </p>
+            <a class="primary" href="#lab">Take the 60-second challenge ↗</a
+            ><small>No sign-up · Synthetic data · Real computation</small>
+          </div>
+        </section>
+        <section class="steps" aria-label="Walkthrough">
+          <div>
+            <b>01 / BREAK</b>
+            <p>Try a mixed or unusual ticket.</p>
+          </div>
+          <div>
+            <b>02 / TEACH</b>
+            <p>Choose its correct destination.</p>
+          </div>
+          <div>
+            <b>03 / MEASURE</b>
+            <p>Check the held-out result. Gains aren’t guaranteed.</p>
+          </div>
+        </section>
+        <section id="lab">
+          <div class="section-title">
+            <div>
+              <div class="eyebrow">YOUR PRIVATE SANDBOX</div>
+              <h2>The experiment starts here.</h2>
+            </div>
+            <span id="version" class="pill">MODEL v0 · SEED 41</span>
+          </div>
+          <div id="error" role="alert"></div>
+          <p id="notice" role="status" class="muted"></p>
+          <div class="lab-grid">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>01 — Challenge the classifier</h3>
+                <span>LIVE</span>
+              </div>
+              <label for="ticket">Synthetic support ticket</label
+              ><textarea id="ticket" maxlength="1000">
+My parcel arrived but the invoice is wrong</textarea
+              >
+              <div class="examples">
+                Try:
+                <button data-example="I cannot log in to see my refund">
+                  Mixed intent</button
+                ><button data-example="The box is still not here">
+                  Unfamiliar wording
+                </button>
+              </div>
+              <button id="predict" class="primary" data-session>
+                Run prediction ↗
+              </button>
+              <div id="prediction" class="prediction"></div>
+              <hr />
+              <h3>02 — Teach one correction</h3>
+              <label for="label">Correct destination</label
+              ><select id="label">
+                <option>account</option>
+                <option selected>billing</option>
+                <option>delivery</option></select
+              ><button id="feedback" data-session>
+                Apply correction + evaluate</button
+              ><small
+                >Up to 20 corrections. Only your session changes. Use synthetic
+                text; it remains in server memory until expiry.</small
+              >
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>03 — Inspect the evidence</h3>
+                <span>HELD OUT</span>
+              </div>
+              <label class="toggle"
+                ><input type="checkbox" id="shift" data-session /> Inject
+                distracting vocabulary</label
+              >
+              <p class="muted" id="shift-description"></p>
+              <div id="metrics" class="metric-grid"></div>
+              <h4>Where does it get confused?</h4>
+              <p class="muted">Rows: actual · Columns: predicted</p>
+              <div id="matrix"></div>
+              <details>
+                <summary>Calibration bins &amp; interpretation</summary>
+                <p>
+                  Expected calibration error uses five equal-width confidence
+                  bins. Lower is better. This tiny synthetic set does not
+                  establish real-world reliability.
+                </p>
+                <div id="bins"></div>
+              </details>
+            </article>
+          </div>
+          <div class="toolbar">
+            <button id="rollback" data-session>↶ Roll back one update</button
+            ><button id="reset">Reset experiment</button
+            ><button id="json" data-session>Export JSON ↓</button
+            ><button id="csv" data-session>Corrections CSV ↓</button>
+          </div>
+        </section>
+        <section id="method" class="method">
+          <div>
+            <div class="eyebrow">OPEN THE BLACK BOX</div>
+            <h2>Small model.<br />Inspectable behaviour.</h2>
+          </div>
+          <div>
+            <p>
+              4096 hashed text features → linear classifier → three support
+              queues. Java implements the original one-vs-rest logistic SGD
+              updates using the preserved trained baseline. No LLM or simulated
+              training.
+            </p>
+            <p>
+              54 training, 18 validation and 36 test examples use separate
+              templates. Validation is reserved; no tuning is performed. The
+              test set shares vocabulary with training and is intentionally
+              easy. Repeatedly viewing scores can bias your choices: these are
+              exploratory demo metrics, not independent research results.
+            </p>
+            <p>
+              Each browser load creates an in-memory sandbox. Sessions expire
+              after 30 minutes of inactivity or a server restart. No accounts,
+              trackers, database or shared feedback model. Exports contain the
+              text you entered.
+            </p>
+            <p>
+              Personal, non-commercial portfolio and learning demonstration. No
+              claims of production readiness. Architecture, tests, limitations
+              and deployment instructions accompany the source.
+            </p>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <span>◈ OutcomeLab</span><span>Break It. Teach It. Measure It.</span
+        ><span>Illustrative metrics. Honest experiments.</span>
+      </footer>
+    </div>
+  </body>
+</html>

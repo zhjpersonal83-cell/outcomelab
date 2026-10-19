@@ -1,4 +1,0 @@
-#!/bin/sh
-case " $RENEWED_DOMAINS " in
-  *" outcomelab.zhongjiehuang.com "*) /usr/sbin/nginx -t && /bin/systemctl reload nginx ;;
-esac
