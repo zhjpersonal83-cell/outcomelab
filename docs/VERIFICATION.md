@@ -15,8 +15,10 @@ Warnings: Starlette's TestClient reports an httpx deprecation warning; tests sti
 
 Subsequent deployment checks: all 9 backend tests passed on Ubuntu x86_64 with Python 3.12.15. The same Chromium E2E test passed against https://outcomelab.zhongjiehuang.com over verified HTTPS. Nginx configuration test passed; the readiness endpoint and static frontend returned 200. Existing portfolio, IAFM and Marginloom endpoints returned 200 and their services remained active. Dedicated service had zero restarts and used approximately 103 MB.
 
-Not executed: Docker build/Compose smoke (Docker unavailable), GitHub Actions hosted run. Production uses native systemd/Nginx instead of Docker to reduce overhead on this small shared host.
+Hosted GitHub Actions run 39238690979 passed backend tests, Ruff, frontend lint/type/build, Chromium E2E, Docker Compose build/start, readiness smoke test, and teardown. Validated code commit: `0cbd18252b82d2fdd9dd6cc34b646151f171e4ae`. Run: https://github.com/zhjpersonal83-cell/outcomelab/actions/runs/39238690979. Local Docker remains unavailable. Production uses native systemd/Nginx instead of Docker to reduce overhead on this small shared host.
 
 The user authorized the public repository zhjpersonal83-cell/outcomelab; authenticated repository ownership and push permissions were verified. Browser sign-in was completed and the public repository was created. Source synchronization is recorded by its verified branch commit.
 
 Live baseline measurement: clean accuracy 100%, distractor-shift accuracy 55.56%, each on 36 toy examples. These are measured synthetic demonstration results, not production benchmarks. Live Chromium reported no page JavaScript errors.
+
+The first hosted run caught mobile horizontal overflow with Linux fonts. The responsive header/grid fix passed the subsequent hosted run and the live HTTPS browser test. Full mobile screenshot was visually inspected.

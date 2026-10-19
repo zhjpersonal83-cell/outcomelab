@@ -38,4 +38,6 @@ The initial verified release is retained at `/opt/outcomelab/releases/20261019T1
 For future updates, prepare a new release directory and venv; test before switching `current`. Preserve the previous symlink target. To roll back, switch `current` to that target, restart only `outcomelab`, syntax-check/reload Nginx only if its site configuration changed, then repeat HTTPS and browser checks. A service restart intentionally clears ephemeral sessions.
 
 ## Remaining release work
-Public source repository: https://github.com/zhjpersonal83-cell/outcomelab. Public deployment is complete. Docker compatibility, CI hosted execution, a full accessibility audit, and stress testing remain separate outstanding checks.
+Public source repository: https://github.com/zhjpersonal83-cell/outcomelab. Public deployment is complete. Hosted Docker build/start/readiness checks and CI have passed. A full accessibility audit and stress testing remain separate outstanding checks.
+
+Frontend mobile-layout patch: `0cbd18252b82d2fdd9dd6cc34b646151f171e4ae`. The prior static build is retained at `/opt/outcomelab/backups/frontend-before-0cbd182`. New assets were copied before atomically replacing the HTML entry point; the backend stayed running.
