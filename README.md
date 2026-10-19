@@ -6,14 +6,14 @@ Break it. Teach it. Measure it.
 
 ## Stack and structure
 
-Aligned with IAFM: **Java 21, Maven WAR, Servlet 4 (`javax.servlet`), Tomcat 9, HTML/CSS/native JavaScript**, with JDBC/MySQL for Marginloom persistence. There is no Node, React, TypeScript, FastAPI, Cloudflare or SQLite application runtime. Optional offline Python research tools are kept separately, as in IAFM.
+Aligned with IAFM: **Java 21, Maven WAR, Servlet 4 (`javax.servlet`), Tomcat 9, HTML/CSS/native JavaScript**, with JDBC/MySQL. OutcomeLab reads its immutable baseline from MySQL; corrections remain in ephemeral memory. There is no Node, React, TypeScript, FastAPI, Cloudflare or SQLite application runtime. Optional offline Python research tools are kept separately, as in IAFM.
 
 ```text
 pom.xml
 src/main/JavaWeb/Java/
   Controller/       # HTTP/API and validation boundary
   Model/            # Classifier/reliability and application logic
-  DatabaseService/  # JDBC lifecycle, schema and migration (Marginloom)
+  DatabaseService/  # JDBC model registry, schema and driver lifecycle
 src/main/JavaWeb/WebAPP/
   index.html
   assets/css/app.css
@@ -29,7 +29,7 @@ deploy/
 
 ## Existing capabilities
 
-OutcomeLab preserves the original 4096-feature hashing transform, exported trained coefficients, normalized one-vs-rest probabilities and real logistic SGD corrections. The Java implementation has fixture parity against the original Python implementation at baseline and after successive updates, including Unicode inputs. Frozen train/validation/test templates, distractor evaluation, 20-update cap, isolated 30-minute sandboxes, exact rollback and JSON/CSV exports remain available. It has no database because the existing product deliberately uses ephemeral experiments.
+OutcomeLab preserves the original 4096-feature hashing transform, exported trained coefficients, normalized one-vs-rest probabilities and real logistic SGD corrections. The Java implementation has fixture parity against the original Python implementation at baseline and after successive updates, including Unicode inputs. Frozen train/validation/test templates, distractor evaluation, 20-update cap, isolated 30-minute sandboxes, exact rollback and JSON/CSV exports remain available. A MySQL registry holds only the checksum-verified baseline. Experiment text, learned corrections and model snapshots remain ephemeral.
 
 
 ## Build and test
@@ -40,7 +40,7 @@ Install Java 21 and Maven 3.9+, then run:
 mvn verify
 ```
 
-Deploy `target/OutcomeLab.war` to Tomcat 9. Maven runs independent numeric fixtures and real HTTP requests against embedded Tomcat. H2 in MySQL mode is used only by tests; live Marginloom uses MySQL. Native browser scripts require no frontend build step.
+Deploy `target/OutcomeLab.war` to Tomcat 9. Maven runs independent numeric fixtures and real HTTP requests against embedded Tomcat. H2 in MySQL mode is used only by tests; live applications use MySQL. Native browser scripts require no frontend build step.
 
 Optional baseline regeneration: install src/main/Python/requirements.txt in a virtual environment and run python src/main/Python/reproduce_baseline.py. This overwrites the reference model; run all parity tests before accepting it.
 

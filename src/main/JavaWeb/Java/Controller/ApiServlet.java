@@ -26,7 +26,16 @@ public final class ApiServlet extends JsonServlet {
     String path = req.getPathInfo() == null ? "" : req.getPathInfo(), method = req.getMethod();
     if (req.getContentLengthLong() > 8192) throw new HttpError(413, "Request too large");
     if (method.equals("GET") && path.equals("/health")) {
-      json(res, new JSONObject().put("status", "ok").put("runtime", "Java 21 / Servlet 4"));
+      json(
+          res,
+          new JSONObject()
+              .put("status", "ok")
+              .put("runtime", "Java 21 / Servlet 4")
+              .put(
+                  "database",
+                  DatabaseService.BaselineRepository.configured()
+                      ? "ready"
+                      : "packaged-test-baseline"));
       return;
     }
     if (method.equals("GET") && path.equals("/ready")) {

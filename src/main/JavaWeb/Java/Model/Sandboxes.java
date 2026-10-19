@@ -2,7 +2,6 @@ package Model;
 
 import Controller.HttpError;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.*;
 import org.json.*;
@@ -38,11 +37,7 @@ public final class Sandboxes {
 
   public Sandboxes(int capacity) {
     this.capacity = Math.max(1, Math.min(128, capacity));
-    try (var in = getClass().getResourceAsStream("/baseline.json")) {
-      baseline = new JSONObject(new String(in.readAllBytes(), StandardCharsets.UTF_8));
-    } catch (IOException ex) {
-      throw new IllegalStateException(ex);
-    }
+    baseline = DatabaseService.BaselineRepository.load();
     base = new Classifier(baseline);
     for (String split : List.of("validation", "test"))
       for (Object text : baseline.getJSONObject(split).getJSONArray("texts"))
