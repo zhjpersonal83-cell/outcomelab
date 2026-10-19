@@ -23,9 +23,18 @@ test("complete an honest experiment", async ({ page }) => {
   await page.getByRole("button", { name: "Toggle colour theme" }).click();
   await expect(page.locator("[data-theme=light]")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBeTruthy();
+  const layout = await page.evaluate(() => ({
+    width: innerWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    overflowing: Array.from(document.querySelectorAll("body *"))
+      .filter((el) => el.getBoundingClientRect().right > innerWidth + 1)
+      .map((el) => ({
+        tag: el.tagName,
+        className: el.className,
+        right: el.getBoundingClientRect().right,
+      })),
+  }));
+  expect(layout.scrollWidth, JSON.stringify(layout)).toBeLessThanOrEqual(
+    layout.width,
+  );
 });
