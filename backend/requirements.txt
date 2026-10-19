@@ -1,0 +1,4 @@
+-c requirements.lock
+fastapi==0.147.0
+uvicorn==0.54.0
+scikit-learn==1.9.1

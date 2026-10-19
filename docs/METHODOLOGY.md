@@ -1,0 +1,11 @@
+# Evaluation methodology and design decisions
+
+Data are deterministic synthetic combinations of 18 category words and six templates: 54 training, 18 reserved validation, 36 test rows. Templates are partitioned before training; no identical rows cross partitions. Vocabulary intentionally overlaps. Validation is unused; there is no hyperparameter search. Test metrics are exploratory because users can repeatedly see the set's performance. Do not cite them as generalization benchmarks.
+
+The shift preserves test labels and appends a fixed distractor from the next category. It measures lexical interference, not a natural-world drift distribution. No randomized or learned drift is claimed. A fixed construction is more reproducible than an unlabelled free-text drift slider.
+
+Model: HashingVectorizer with 4096 non-negative L2-normalized features; SGDClassifier, log loss, alpha .001, seed 41, library defaults otherwise. One correction invokes partial_fit once on one example; no hidden replay. Versions retain all weights for exact rollback. Baseline is immutable. Tests reject exact validation/test/shifted examples, ignoring case and surrounding whitespace. Semantic paraphrases cannot be reliably excluded: adaptive test leakage remains a limitation.
+
+Metrics: accuracy; multiclass log loss; multiclass Brier sum over classes averaged over rows; expected calibration error weighted over five equal-width confidence bins. Predictions use argmax. Confidence is raw model probability, not a calibrated guarantee. No calibration fitting is performed. Confusion matrix order is account, billing, delivery. JSON exports include seed, model settings, ordered corrections and clean/shifted measurements; recreate baseline with the locked environment and replay corrections to reproduce an experiment. CSV exports corrections only and neutralize spreadsheet formulas.
+
+Limitations: toy vocabulary, small samples, hashed feature collisions, no language understanding, uncalibrated probabilities, no statistical significance claims, in-memory state, session loss on restart, serial training, approximate application rate limits behind proxies, no distributed denial-of-service defense. No second prompt-injection challenge: this classifier executes no tools or prompts.

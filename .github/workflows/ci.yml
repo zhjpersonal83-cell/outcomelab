@@ -1,0 +1,25 @@
+name: Validate
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.25.0'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r backend/requirements-dev.txt
+      - run: cd backend && python -m pytest -q
+      - run: ruff check backend
+      - run: cd frontend && pnpm install --frozen-lockfile && pnpm lint && pnpm build
+      - run: cd frontend && pnpm exec playwright install --with-deps chromium && pnpm test:e2e
+      - run: docker compose up --build -d --wait
+      - run: curl --fail http://127.0.0.1:8080/api/ready
+      - if: always()
+        run: docker compose down
